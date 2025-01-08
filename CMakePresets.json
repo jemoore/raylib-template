@@ -2,13 +2,6 @@
     "version": 2,
     "configurePresets": [
         {
-            "name": "conan-debug",
-            "hidden": true,
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/conan/debug/build/generators/conan_toolchain.cmake"
-            }
-        },
-        {
             "name": "release",
             "hidden": true,
             "cacheVariables": {
@@ -31,7 +24,7 @@
         {
             "name": "linux",
             "hidden": true,
-            "generator": "linux Makefiles",
+            "generator": "Unix Makefiles",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS_INIT": "$env{CMAKE_CXX_FLAGS} -Werror -Wall -Wextra -pedantic"
             }
@@ -40,6 +33,23 @@
             "name": "linux-shared",
             "hidden": true,
             "inherits": "linux",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS_INIT": "$env{CMAKE_CXX_FLAGS_INIT} $env{CMAKE_CXX_FLAGS} -fPIC -Werror -Wall -Wextra -pedantic",
+                "BUILD_SHARED_LIBS": true
+            }
+        },
+        {
+            "name": "MinGW",
+            "hidden": true,
+            "generator": "MinGW Makefiles",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS_INIT": "$env{CMAKE_CXX_FLAGS} -Werror -Wall -Wextra -pedantic"
+            }
+        },
+        {
+            "name": "MinGW-shared",
+            "hidden": true,
+            "inherits": "MinGW",
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS_INIT": "$env{CMAKE_CXX_FLAGS_INIT} $env{CMAKE_CXX_FLAGS} -fPIC -Werror -Wall -Wextra -pedantic",
                 "BUILD_SHARED_LIBS": true
@@ -85,7 +95,7 @@
             "name": "linux-debug",
             "displayName": "linux Make Debug",
             "binaryDir": "${sourceDir}/build/linux-debug",
-            "inherits": ["linux", "debug", "conan-debug"],
+            "inherits": ["linux", "debug"],
             "cacheVariables": {
                 "CMAKE_CXX_FLAGS": "-O0 --coverage -g -fsanitize=address",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/linux-debug/install"
@@ -101,6 +111,43 @@
             }
         },
         {
+            "name": "MinGW-release",
+            "displayName": "MinGW Make Release",
+            "binaryDir": "${sourceDir}/build/mingw-release",
+            "inherits": ["MinGW", "release"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/mingw-release/install"
+            }
+        },
+        {
+            "name": "MinGW-release-shared",
+            "displayName": "MinGW Make Release Shared",
+            "binaryDir": "${sourceDir}/build/mingw-release-shared",
+            "inherits": ["MinGW-shared", "MinGW-release"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/mingw-release-shared/install"
+            }
+        },
+        {
+            "name": "MinGW-debug",
+            "displayName": "MinGW Make Debug",
+            "binaryDir": "${sourceDir}/build/MinGW-debug",
+            "inherits": ["MinGW", "debug"],
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-O0 --coverage -g",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/mingw-debug/install"
+            }
+        },
+        {
+            "name": "MinGW-debug-shared",
+            "displayName": "MinGW Make Debug Shared",
+            "binaryDir": "${sourceDir}/build/mingw-debug-shared",
+            "inherits": ["MinGW-shared", "MinGW-debug"],
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/mingw-debug-shared/install"
+            }
+        },
+        {
             "name": "vs2022-release",
             "displayName": "Visual Studio 2022 Release",
             "binaryDir": "${sourceDir}/build/vs2022-release",
@@ -113,7 +160,7 @@
             "name": "vs2022-debug",
             "displayName": "Visual Studio 2022 Debug",
             "binaryDir": "${sourceDir}/build/vs2022-debug",
-            "inherits": ["vs2022", "debug", "conan-debug"],
+            "inherits": ["vs2022", "debug"],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/vs2022-debug/install"
             }
@@ -131,7 +178,7 @@
             "name": "vs2022-debug-shared",
             "displayName": "Visual Studio 2022 Debug Shared",
             "binaryDir": "${sourceDir}/build/vs2022-debug-shared",
-            "inherits": ["vs2022-shared", "debug", "conan-debug"],
+            "inherits": ["vs2022-shared", "debug"],
             "cacheVariables": {
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/build/vs2022-debug/install"
             }
@@ -184,6 +231,30 @@
             "name": "linux-release-shared",
             "displayName": "linux Make Release Build",
             "configurePreset": "linux-release-shared",
+            "configuration": "Release"
+        },
+        {
+            "name": "MinGW-debug",
+            "displayName": "MinGW Make Debug Build",
+            "configurePreset": "MinGW-debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "MinGW-debug-shared",
+            "displayName": "MinGW Make Debug Build",
+            "configurePreset": "MinGW-debug-shared",
+            "configuration": "Debug"
+        },
+        {
+            "name": "MinGW-release",
+            "displayName": "MinGW Make Release Build",
+            "configurePreset": "MinGW-release",
+            "configuration": "Release"
+        },
+        {
+            "name": "MinGW-release-shared",
+            "displayName": "MinGW Make Release Build",
+            "configurePreset": "MinGW-release-shared",
             "configuration": "Release"
         }
     ]
